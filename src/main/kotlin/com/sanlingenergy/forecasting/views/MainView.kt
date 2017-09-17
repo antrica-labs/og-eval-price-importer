@@ -5,7 +5,6 @@ import javafx.scene.control.Alert
 import javafx.stage.FileChooser
 import tornadofx.*
 import java.io.File
-import javax.swing.filechooser.FileNameExtensionFilter
 
 class MainView : View("Price Deck Creation Tool") {
     override val root = borderpane {
