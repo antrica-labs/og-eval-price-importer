@@ -12,6 +12,7 @@ data class PriceCode(
         val product: String,
         @get:JacksonXmlProperty(isAttribute = true, localName = "price_code_type")
         val priceCodeType: String,
+        @get:JacksonXmlProperty(localName = "PRICE")
         @get:JacksonXmlElementWrapper(useWrapping = false)
-        val prices: Array<Price>
+        val prices: List<Price>
 )

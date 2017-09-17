@@ -1,7 +1,9 @@
 package com.sanlingenergy.forecasting.models
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 
+@JacksonXmlRootElement(localName = "PRICE_CODE")
 data class Price(
         @get:JacksonXmlProperty(isAttribute = true, localName = "effective_date")
         val effectiveDate: String,

@@ -1,6 +1,8 @@
 package com.sanlingenergy.forecasting
 
+import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
+import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator
 import com.sanlingenergy.forecasting.models.*
 import com.sanlingenergy.forecasting.views.MainView
 import javafx.application.Application
@@ -14,8 +16,8 @@ class MyApp : App(MainView::class, Styles::class)
 fun main(args: Array<String>) {
     val dataset = Dataset(
             priceDeck = PriceDeck(escalationPercentage = 2.0, effectiveYear = 2017, years = 5, yearsByMonth = 3, description = "Update today"),
-            priceCodes = arrayOf(
-                    PriceCode(name = "AB Plantgate Spot", product = "Gas", priceCodeType = "Price", prices = arrayOf(
+            priceCodes = arrayListOf(
+                    PriceCode(name = "AB Plantgate Spot", product = "Gas", priceCodeType = "Price", prices = arrayListOf(
                             Price(effectiveDate = "2017-01-01", basePrice = 1.78636796, baseOffset = 0.0, currencyFactor = 0.0, currencyOffset = 0.0, adjustmentFactor = 0.0, netPrice = 1.78636796),
                             Price(effectiveDate = "2017-02-01", basePrice = 2.28729823, baseOffset = 0.0, currencyFactor = 0.0, currencyOffset = 0.0, adjustmentFactor = 0.0, netPrice = 2.28729823),
                             Price(effectiveDate = "2017-03-01", basePrice = 2.31084258, baseOffset = 0.0, currencyFactor = 0.0, currencyOffset = 0.0, adjustmentFactor = 0.0, netPrice = 2.31084258),
@@ -57,6 +59,10 @@ fun main(args: Array<String>) {
             ))
 
     val mapper = XmlMapper()
+
+    mapper.configure(ToXmlGenerator.Feature.WRITE_XML_DECLARATION, true )
+    mapper.enable(SerializationFeature.INDENT_OUTPUT)
+
     val xml = mapper.writeValueAsString(dataset)
 
     println(xml)
