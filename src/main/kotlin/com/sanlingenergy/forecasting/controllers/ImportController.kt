@@ -1,9 +1,6 @@
 package com.sanlingenergy.forecasting.controllers
 
-import com.sanlingenergy.forecasting.models.Dataset
-import com.sanlingenergy.forecasting.models.Price
-import com.sanlingenergy.forecasting.models.PriceCode
-import com.sanlingenergy.forecasting.models.PriceDeck
+import com.sanlingenergy.forecasting.models.*
 import com.sun.xml.internal.ws.wsdl.writer.document.Import
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
@@ -27,6 +24,18 @@ class ImportController : Controller() {
 
     var dataset: Dataset? = null
     val priceCodes: ObservableList<PriceCode> = FXCollections.observableArrayList<PriceCode>()
+    val defaultPrices = arrayListOf(
+            DefaultPrice("Butane", "Butane", "All"),
+            DefaultPrice("Condensate", "Condensate", "All"),
+            DefaultPrice("AECO", "Gas", "All"),
+            DefaultPrice("Propane", "Propane", "All"),
+            DefaultPrice("Edmonton Light", "Oil", "All"),
+            DefaultPrice("Ethane", "Ethane", "All"),
+            DefaultPrice("Condensate", "Field Condensate", "All")
+
+
+    )
+
 
     fun loadStripFile(file: File) {
         val df = SimpleDateFormat("yyyy-MM-dd")
@@ -83,7 +92,7 @@ class ImportController : Controller() {
         }
 
         priceCodes.addAll(codes)
-        dataset = Dataset(priceDeck = deck, priceCodes = codes)
+        dataset = Dataset(priceDeck = deck, priceCodes = codes, defaultPrices = defaultPrices)
     }
 
 

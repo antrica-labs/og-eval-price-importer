@@ -11,5 +11,9 @@ data class Dataset(
 
         @get:JacksonXmlProperty(localName = "PRICE_CODE")
         @get:JacksonXmlElementWrapper(useWrapping = false)
-        var priceCodes: ArrayList<PriceCode>
+        var priceCodes: ArrayList<PriceCode>,
+
+        @get:JacksonXmlProperty(localName = "DEFAULT_PRICE")
+        @get:JacksonXmlElementWrapper(useWrapping = false)
+        var defaultPrices: ArrayList<DefaultPrice>
 )
