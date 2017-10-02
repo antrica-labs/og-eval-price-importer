@@ -13,9 +13,6 @@ class MosaicExportController : Controller() {
 
         mapper.configure(ToXmlGenerator.Feature.WRITE_XML_DECLARATION, true )
         mapper.enable(SerializationFeature.INDENT_OUTPUT)
-
-        val xml = mapper.writeValueAsString(dataset)
-
-        println(xml)
+        mapper.writeValue(exportFile, dataset);
     }
 }

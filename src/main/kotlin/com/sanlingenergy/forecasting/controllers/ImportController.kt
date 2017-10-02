@@ -8,14 +8,18 @@ import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import tornadofx.Controller
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ImportController : Controller() {
     var dataset: Dataset? = null
     val priceCodes: ObservableList<PriceCode> = FXCollections.observableArrayList<PriceCode>()
 
     fun loadStripFile(file: File) {
+        val df = SimpleDateFormat("yyyy-MM-dd")
+
         val d = Dataset(
-                priceDeck = PriceDeck(escalationPercentage = 2.0, effectiveYear = 2017, years = 5, yearsByMonth = 3, description = "Update today"),
+                priceDeck = PriceDeck(escalationPercentage = 2.0, effectiveYear = 2017, years = 5, yearsByMonth = 3, description = "Updated ${df.format(Calendar.getInstance().getTime())}"),
                 priceCodes = arrayListOf(
                         PriceCode(name = "AB Plantgate Spot", product = "Gas", priceCodeType = "Price", prices = arrayListOf(
                                 Price(effectiveDate = "2017-01-01", basePrice = 1.78636796, baseOffset = 0.0, currencyFactor = 0.0, currencyOffset = 0.0, adjustmentFactor = 0.0, netPrice = 1.78636796),

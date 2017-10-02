@@ -18,12 +18,12 @@ class MainView : View("Price Deck Creation Tool") {
         menubar {
             menu("File") {
                 item("Open strip...").action {
-                    val filename = chooseFile("Select the strip CSV:", arrayOf(FileChooser.ExtensionFilter("CSV", "*.csv")) ) {
+                    val files = chooseFile("Select the strip CSV", arrayOf(FileChooser.ExtensionFilter("CSV", "*.csv")) ) {
                         initialDirectory = File(".")
                     }
 
-                    if (filename.isNotEmpty()) {
-                        importController.loadStripFile(filename[0])
+                    if (files.isNotEmpty()) {
+                        importController.loadStripFile(files[0])
                     }
                 }
 
@@ -38,8 +38,17 @@ class MainView : View("Price Deck Creation Tool") {
                 item("Mosaic price deck").action {
                     val dataset = importController.dataset
 
-                    if (dataset != null)
-                        mosaicController.exportDataset(dataset, File("test"))
+                    if (dataset != null) {
+                        val files = chooseFile("Save to Mosaic XML", arrayOf(FileChooser.ExtensionFilter("XML", "*.xml")), FileChooserMode.Save ) {
+                            initialDirectory = File(".")
+                        }
+
+                        if (files.isNotEmpty()) {
+                            mosaicController.exportDataset(dataset, files[0])
+                            alert(Alert.AlertType.INFORMATION, "", "Mosaic export saved!")
+                        }
+
+                    }
                 }
             }
         }
@@ -49,12 +58,17 @@ class MainView : View("Price Deck Creation Tool") {
                 vGrow = Priority.ALWAYS
             }
 
-            column("Price code", PriceCode::name)
-            column("Total entries", PriceCode::prices).cellFormat {
+            val priceCol = column("Price code", PriceCode::name)
+            val entriesCol = column("Total entries", PriceCode::prices)
+
+            priceCol.weigthedWidth(3.0)
+            entriesCol.weigthedWidth(1.0)
+
+            entriesCol.cellFormat {
                 text = it.count().toString()
             }
 
-            resizeColumnsToFitContent()
+            columnResizePolicy = SmartResize.POLICY
         }
     }
 }
