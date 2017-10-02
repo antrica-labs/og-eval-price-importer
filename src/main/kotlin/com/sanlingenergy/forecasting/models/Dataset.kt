@@ -8,7 +8,8 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 data class Dataset(
         @get:JacksonXmlProperty(localName = "PRICE_DECK")
         var priceDeck: PriceDeck,
+
         @get:JacksonXmlProperty(localName = "PRICE_CODE")
         @get:JacksonXmlElementWrapper(useWrapping = false)
-        var priceCodes: List<PriceCode>
+        var priceCodes: ArrayList<PriceCode>
 )

@@ -14,6 +14,7 @@
         <woodstox.version>4.4.1</woodstox.version>
         <jackson-kotlin.version>2.9.0</jackson-kotlin.version>
         <jackson-dataformat.version>2.9.0</jackson-dataformat.version>
+        <apache-csv.version>1.5</apache-csv.version>
     </properties>
 
     <dependencies>
@@ -41,6 +42,11 @@
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-xml</artifactId>
             <version>${jackson-dataformat.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-csv</artifactId>
+            <version>${apache-csv.version}</version>
         </dependency>
     </dependencies>
 

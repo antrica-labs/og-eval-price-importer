@@ -8,11 +8,14 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 data class PriceCode(
         @get:JacksonXmlProperty(isAttribute = true, localName = "name")
         val name: String,
+
         @get:JacksonXmlProperty(isAttribute = true, localName = "product")
         val product: String,
+
         @get:JacksonXmlProperty(isAttribute = true, localName = "price_code_type")
         val priceCodeType: String,
+
         @get:JacksonXmlProperty(localName = "PRICE")
         @get:JacksonXmlElementWrapper(useWrapping = false)
-        val prices: List<Price>
+        val prices: ArrayList<Price> = ArrayList<Price>()
 )
