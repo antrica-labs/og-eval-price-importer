@@ -8,6 +8,8 @@
     <packaging>jar</packaging>
 
     <properties>
+        <app.main>com.sanlingenergy.forecasting.Main</app.main>
+
         <kotlin.version>1.1.51</kotlin.version>
         <tornadofx.version>1.7.10</tornadofx.version>
         <javafx-maven.version>8.8.3</javafx-maven.version>
@@ -15,18 +17,29 @@
         <jackson-kotlin.version>2.9.0</jackson-kotlin.version>
         <jackson-dataformat.version>2.9.0</jackson-dataformat.version>
         <apache-csv.version>1.5</apache-csv.version>
+
+        <maven.antrun.version>1.8</maven.antrun.version>
+        <maven.shade.version>3.1.0</maven.shade.version>
+        <maven.resources.version>3.0.2</maven.resources.version>
+        <launch4j.version>1.7.21</launch4j.version>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>no.tornado</groupId>
-            <artifactId>tornadofx</artifactId>
-            <version>${tornadofx.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib-jre8</artifactId>
             <version>${kotlin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-test</artifactId>
+            <version>${kotlin.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>no.tornado</groupId>
+            <artifactId>tornadofx</artifactId>
+            <version>${tornadofx.version}</version>
         </dependency>
         <dependency>
             <groupId>org.codehaus.woodstox</groupId>
@@ -51,6 +64,7 @@
     </dependencies>
 
     <build>
+        <sourceDirectory>src/main/kotlin</sourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
@@ -66,11 +80,13 @@
                         <goals>
                             <goal>compile</goal>
                         </goals>
-                        <configuration>
-                            <sourceDirs>
-                                <source>src/main/kotlin</source>
-                            </sourceDirs>
-                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>test-compile</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>test-compile</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
@@ -81,6 +97,84 @@
                 <configuration>
                     <mainClass>com.sanlingenergy.forecasting.MyAppKt</mainClass>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>${maven.antrun.version}</version>
+                <executions>
+                    <execution>
+                        <id>jre-copy</id>
+                        <phase>package</phase>
+                        <configuration>
+                            <tasks>
+                                <unzip src="jre/jre-1.8.0_144-win64.zip" dest="${project.build.directory}/dist/jvm/" />
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>${maven.shade.version}</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml</dependencyReducedPomLocation>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <manifestEntries>
+                                        <Main-Class>${app.main}</Main-Class>
+                                    </manifestEntries>
+                                </transformer>
+                            </transformers>
+                            <outputFile>${project.build.directory}/dist/${project.artifactId}-${project.version}.fat.jar</outputFile>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.akathist.maven.plugins.launch4j</groupId>
+                <artifactId>launch4j-maven-plugin</artifactId>
+                <version>${launch4j.version}</version>
+                <executions>
+                    <execution>
+                        <id>l4j-ui</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>launch4j</goal>
+                        </goals>
+                        <configuration>
+                            <headerType>gui</headerType>
+                            <jar>${project.build.directory}/dist/${project.artifactId}-${project.version}.fat.jar</jar>
+                            <outfile>${project.build.directory}/dist/${project.artifactId}.exe</outfile>
+                            <jre>
+                                <path>jvm</path>
+                                <bundledJre64Bit>true</bundledJre64Bit>
+                            </jre>
+                            <versionInfo>
+                                <fileVersion>${project.version}.0.0</fileVersion>
+                                <txtFileVersion>${project.version}</txtFileVersion>
+                                <fileDescription>${project.artifactId}</fileDescription>
+                                <copyright>2017 Simon Twogood</copyright>
+                                <productVersion>${project.version}.0.0</productVersion>
+                                <txtProductVersion>${project.version}</txtProductVersion>
+                                <productName>${project.artifactId}</productName>
+                                <companyName>SanLing Energy</companyName>
+                                <internalName>SanLing</internalName>
+                                <originalFilename>${project.artifactId}-${project.version}.exe</originalFilename>
+                            </versionInfo>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

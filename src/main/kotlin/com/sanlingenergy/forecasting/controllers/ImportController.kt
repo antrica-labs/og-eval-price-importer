@@ -32,10 +32,7 @@ class ImportController : Controller() {
             DefaultPrice("Edmonton Light", "Oil", "All"),
             DefaultPrice("Ethane", "Ethane", "All"),
             DefaultPrice("Condensate", "Field Condensate", "All")
-
-
     )
-
 
     fun loadStripFile(file: File) {
         val df = SimpleDateFormat("yyyy-MM-dd")
@@ -94,6 +91,4 @@ class ImportController : Controller() {
         priceCodes.addAll(codes)
         dataset = Dataset(priceDeck = deck, priceCodes = codes, defaultPrices = defaultPrices)
     }
-
-
 }
